@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  postgres_db:
+    image: postgres:15-alpine
+    container_name: nhl-postgres
+    environment:
+      POSTGRES_USER: nhl_analytics_user
+      POSTGRES_PASSWORD: nhl_secure_password
+      POSTGRES_DB: nhl_predictions_db
+    ports:
+      - "5432:5432"
+    volumes:
+      # A persistent volume will ensure data remains intact if the container stops
+      - pg_storage:/var/lib/postgresql/data
+      # The initialization script will be mounted into the automatic execution folder
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  pg_storage:
